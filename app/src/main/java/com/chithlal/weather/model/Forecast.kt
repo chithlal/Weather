@@ -1,12 +1,14 @@
 package com.chithlal.weather.model
 
+import java.io.Serializable
+
 data class Forecast(
     val city: City,
     val cnt: Int,
     val cod: String,
     val list: List<Temp>,
     val message: Int
-)
+): Serializable
 
 data class City(
     val coord: Coord,
@@ -17,7 +19,7 @@ data class City(
     val sunrise: Int,
     val sunset: Int,
     val timezone: Int
-)
+): Serializable
 
 data class Temp(
     val clouds: Clouds,
@@ -30,13 +32,13 @@ data class Temp(
     val visibility: Int,
     val weather: List<Weather>,
     val wind: Wind
-)
+): Serializable
 
 
 
 
 data class Rain(
     val `3h`: Double
-)
+): Serializable
 
 

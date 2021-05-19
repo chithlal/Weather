@@ -6,22 +6,22 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.chithlal.weather.R
+import com.chithlal.weather.model.Forecast
 
 
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
+private const val ARG_FORECAST = "FORECAST"
 
 
 class ForcastFragment : Fragment() {
 
-    private var param1: String? = null
-    private var param2: String? = null
+    private var forecast: Forecast? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
+            forecast = it.getSerializable(ARG_FORECAST) as Forecast
+
+
         }
     }
 
@@ -36,11 +36,10 @@ class ForcastFragment : Fragment() {
     companion object {
 
         @JvmStatic
-        fun newInstance(param1: String, param2: String) =
+        fun newInstance(forecast: Forecast) =
             ForcastFragment().apply {
                 arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
+                    putSerializable(ARG_FORECAST, forecast)
                 }
             }
     }
