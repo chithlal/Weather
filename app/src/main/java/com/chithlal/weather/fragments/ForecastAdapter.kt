@@ -11,7 +11,7 @@ import com.chithlal.weather.utlity.Constants
 import com.chithlal.weather.utlity.DateUtil
 import kotlinx.android.synthetic.main.layout_forecast_item.view.*
 
-class ForecastAdapter(val context: Context, val tempList: List<Temp>) :
+class ForecastAdapter(val context: Context, val tempList: List<ForcastFragment.ForeCastTemperature>) :
  RecyclerView.Adapter<ForecastAdapter.ViewHolder>(){
 
     class ViewHolder(view: View): RecyclerView.ViewHolder(view) {
@@ -26,8 +26,8 @@ class ForecastAdapter(val context: Context, val tempList: List<Temp>) :
 
     override fun onBindViewHolder(holder: ForecastAdapter.ViewHolder, position: Int) {
         val temperature = tempList[position]
-        holder.temp.text = Constants.convertKToC(temperature.main.temp)
-        holder.day.text = DateUtil.getDayFromDate(temperature.dt_txt)
+        holder.temp.text = Constants.convertKToC(temperature.avgTemp)
+        holder.day.text = DateUtil.getDayFromDate(temperature.date)
     }
 
     override fun getItemCount(): Int {

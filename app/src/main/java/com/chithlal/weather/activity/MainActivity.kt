@@ -31,6 +31,7 @@ class MainActivity : AppCompatActivity() {
         super.onResume()
 
         weatherViewModel.getWeather()
+        weatherViewModel.getForecast()
     }
 
     private fun setupTemperatureView() {
@@ -40,6 +41,7 @@ class MainActivity : AppCompatActivity() {
                 showError(false)
                 val currTemp = it.main.temp
                 tvTemperature.text = Constants.convertKToC(currTemp)
+                tvPlace.text = Constants.location
             }
             else{
                 showError(true)
@@ -71,6 +73,8 @@ class MainActivity : AppCompatActivity() {
         val fragmentManager = supportFragmentManager
         val forecastFragment  = ForcastFragment.newInstance(forecasts)
         fragmentManager.commit {
+            setCustomAnimations(R.anim.framgent_enter_animation, R.anim.framgent_enter_animation, R.anim.framgent_enter_animation, R.anim.framgent_enter_animation)
+
             replace(R.id.container_forcast_frag,forecastFragment)
         }
     }
@@ -78,9 +82,15 @@ class MainActivity : AppCompatActivity() {
     private fun showError(isError: Boolean){
         if (isError){
             error_layout.visibility = View.VISIBLE
+            llTempLayout.visibility = View.GONE
+            rlLoadlinLayout.visibility = View.GONE
         }
         else{
             error_layout.visibility = View.GONE
+            llTempLayout.visibility = View.VISIBLE
         }
+    }
+    private fun showLoading(isLoading: Boolean){
+
     }
 }
