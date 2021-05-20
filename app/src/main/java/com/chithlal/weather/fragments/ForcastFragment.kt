@@ -5,8 +5,13 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.LinearLayout
+import android.widget.Toast
+import androidx.recyclerview.widget.DividerItemDecoration
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.chithlal.weather.R
 import com.chithlal.weather.model.Forecast
+import kotlinx.android.synthetic.main.fragment_forcast.*
 
 
 private const val ARG_FORECAST = "FORECAST"
@@ -31,6 +36,28 @@ class ForcastFragment : Fragment() {
     ): View? {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_forcast, container, false)
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        if (forecast != null){
+            setupForecast(forecast!!)
+        }
+    }
+
+    private fun setupForecast(forecast: Forecast) {
+        val tempertureList = forecast.list
+        if (tempertureList.size >= 5){
+            val fourDayList = tempertureList.subList(1,5)
+            rv_forecastList.apply {
+                layoutManager = LinearLayoutManager(context)
+                adapter = ForecastAdapter(context,fourDayList)
+                addItemDecoration(DividerItemDecoration(context,DividerItemDecoration.HORIZONTAL))
+            }
+        }
+        else{
+            Toast.makeText(context, "Not enough data to forecast!", Toast.LENGTH_SHORT).show()
+        }
     }
 
     companion object {
