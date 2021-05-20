@@ -3,6 +3,7 @@ package com.chithlal.weather.activity
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
+import android.view.animation.AnimationUtils
 import androidx.activity.viewModels
 import androidx.fragment.app.commit
 import androidx.lifecycle.Observer
@@ -13,6 +14,7 @@ import com.chithlal.weather.utlity.Constants
 import com.chithlal.weather.viewmodel.WeatherViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.layout_error_screen.*
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
@@ -23,13 +25,18 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
         setupTemperatureView()
         setupForecastView()
+
+        bt_retry.setOnClickListener{
+            weatherViewModel.getWeather()
+            weatherViewModel.getForecast()
+        }
     }
 
 
 
     override fun onResume() {
         super.onResume()
-
+        showLoading(true)
         weatherViewModel.getWeather()
         weatherViewModel.getForecast()
     }
@@ -42,12 +49,15 @@ class MainActivity : AppCompatActivity() {
                 val currTemp = it.main.temp
                 tvTemperature.text = Constants.convertKToC(currTemp)
                 tvPlace.text = Constants.location
+                showLoading(false)
             }
             else{
+                showLoading(false)
                 showError(true)
             }
         })
         weatherViewModel.weatherErrorLiveData.observe(this, Observer{
+            showLoading(false)
             showError(true)
         })
 
@@ -60,16 +70,18 @@ class MainActivity : AppCompatActivity() {
                 showForecastData(it)
             }
             else{
+                showLoading(false)
                 showError(true)
             }
         })
         weatherViewModel.forecastErrorLiveData.observe(this, Observer {
+            showLoading(false)
             showError(true)
         })
     }
 
     private fun showForecastData(forecasts: Forecast) {
-
+        showLoading(false)
         val fragmentManager = supportFragmentManager
         val forecastFragment  = ForcastFragment.newInstance(forecasts)
         fragmentManager.commit {
@@ -91,6 +103,17 @@ class MainActivity : AppCompatActivity() {
         }
     }
     private fun showLoading(isLoading: Boolean){
+        if (isLoading) {
+            rlLoadlinLayout.visibility = View.VISIBLE
+            llTempLayout.visibility = View.GONE
+            error_layout.visibility = View.GONE
+            val rotateAnim = AnimationUtils.loadAnimation(this, R.anim.rotate_animation)
+            img_loading.startAnimation(rotateAnim)
+        }
+        else
+        {
+            rlLoadlinLayout.visibility = View.GONE
 
+        }
     }
 }

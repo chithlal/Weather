@@ -8,7 +8,6 @@ import com.chithlal.weather.model.Temperature
 import com.chithlal.weather.repository.WeatherRepository
 import com.chithlal.weather.utlity.Constants
 import dagger.hilt.android.lifecycle.HiltViewModel
-import dagger.hilt.android.scopes.ViewModelScoped
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -23,29 +22,40 @@ class WeatherViewModel @Inject constructor(private val weatherRepo: WeatherRepos
     val forecastErrorLiveData = MutableLiveData<String>()
 
     // get current weather
-    fun getWeather(){
+    fun getWeather() {
         viewModelScope.launch {
-            weatherRepo.getWeather(Constants.location,Constants.APPID).let {
-                if (it.isSuccessful){
-                    weatherLiveData.postValue(it.body())
-                }else{
-                    weatherErrorLiveData.postValue("Error!")
+            try {
+                weatherRepo.getWeather(Constants.location, Constants.APPID).let {
+                    if (it.isSuccessful) {
+                        weatherLiveData.postValue(it.body())
+                    } else {
+                        weatherErrorLiveData.postValue("Error!")
+                    }
                 }
+            } catch (e: Exception) {
+                weatherErrorLiveData.postValue("Error!")
+
             }
         }
+
     }
 
-    fun getForecast(){
+    fun getForecast() {
 
         viewModelScope.launch {
-            weatherRepo.getForecast(Constants.location,Constants.APPID).let {
-                if (it.isSuccessful){
-                    forecastLiveData.postValue(it.body())
+            try {
+                weatherRepo.getForecast(Constants.location, Constants.APPID).let {
+                    if (it.isSuccessful) {
+                        forecastLiveData.postValue(it.body())
+                    } else {
+                        forecastErrorLiveData.postValue("Error!")
+                    }
                 }
-                else{
-                    forecastErrorLiveData.postValue("Error!")
-                }
+            } catch (e: Exception) {
+                weatherErrorLiveData.postValue("Error!")
+
             }
+
         }
     }
 }
