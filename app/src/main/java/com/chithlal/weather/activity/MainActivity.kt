@@ -1,11 +1,10 @@
 package com.chithlal.weather.activity
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.os.Handler
 import android.view.View
 import android.view.animation.AnimationUtils
 import androidx.activity.viewModels
+import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.commit
 import androidx.lifecycle.Observer
 import com.chithlal.weather.R
@@ -16,7 +15,6 @@ import com.chithlal.weather.viewmodel.WeatherViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.layout_error_screen.*
-import java.util.*
 import java.util.concurrent.Executors
 import java.util.concurrent.TimeUnit
 
@@ -30,7 +28,7 @@ class MainActivity : AppCompatActivity() {
         setupTemperatureView()
         setupForecastView()
 
-        bt_retry.setOnClickListener{
+        bt_retry.setOnClickListener {
             showLoading(true)
             Executors.newSingleThreadScheduledExecutor().schedule({
                 weatherViewModel.getWeather()
@@ -38,7 +36,6 @@ class MainActivity : AppCompatActivity() {
             }, 2, TimeUnit.SECONDS)
         }
     }
-
 
 
     override fun onResume() {
@@ -61,26 +58,25 @@ class MainActivity : AppCompatActivity() {
                 tvTemperature.text = Constants.convertKToC(currTemp)
                 tvPlace.text = Constants.location
                 showLoading(false)
-            }
-            else{
+            } else {
                 showLoading(false)
                 showError(true)
             }
         })
-        weatherViewModel.weatherErrorLiveData.observe(this, Observer{
+        weatherViewModel.weatherErrorLiveData.observe(this, Observer {
             showLoading(false)
             showError(true)
         })
 
 
     }
+
     private fun setupForecastView() {
 
         weatherViewModel.forecastLiveData.observe(this, Observer {
-            if(it != null){
+            if (it != null) {
                 showForecastData(it)
-            }
-            else{
+            } else {
                 showLoading(false)
                 showError(true)
             }
@@ -94,35 +90,38 @@ class MainActivity : AppCompatActivity() {
     private fun showForecastData(forecasts: Forecast) {
         showLoading(false)
         val fragmentManager = supportFragmentManager
-        val forecastFragment  = ForcastFragment.newInstance(forecasts)
+        val forecastFragment = ForcastFragment.newInstance(forecasts)
         fragmentManager.commit {
-            setCustomAnimations(R.anim.framgent_enter_animation, R.anim.framgent_enter_animation, R.anim.framgent_enter_animation, R.anim.framgent_enter_animation)
+            setCustomAnimations(
+                R.anim.framgent_enter_animation,
+                R.anim.framgent_enter_animation,
+                R.anim.framgent_enter_animation,
+                R.anim.framgent_enter_animation
+            )
 
-            replace(R.id.container_forcast_frag,forecastFragment)
+            replace(R.id.container_forcast_frag, forecastFragment)
         }
     }
 
-    private fun showError(isError: Boolean){
-        if (isError){
+    private fun showError(isError: Boolean) {
+        if (isError) {
             error_layout.visibility = View.VISIBLE
             llTempLayout.visibility = View.GONE
             rlLoadlinLayout.visibility = View.GONE
-        }
-        else{
+        } else {
             error_layout.visibility = View.GONE
             llTempLayout.visibility = View.VISIBLE
         }
     }
-    private fun showLoading(isLoading: Boolean){
+
+    private fun showLoading(isLoading: Boolean) {
         if (isLoading) {
             rlLoadlinLayout.visibility = View.VISIBLE
             llTempLayout.visibility = View.GONE
             error_layout.visibility = View.GONE
             val rotateAnim = AnimationUtils.loadAnimation(this, R.anim.rotate_animation)
             img_loading.startAnimation(rotateAnim)
-        }
-        else
-        {
+        } else {
             rlLoadlinLayout.visibility = View.GONE
 
         }

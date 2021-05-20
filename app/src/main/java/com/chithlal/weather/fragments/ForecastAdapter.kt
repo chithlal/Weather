@@ -6,21 +6,24 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.chithlal.weather.R
-import com.chithlal.weather.model.Temp
 import com.chithlal.weather.utlity.Constants
 import com.chithlal.weather.utlity.DateUtil
 import kotlinx.android.synthetic.main.layout_forecast_item.view.*
 
-class ForecastAdapter(val context: Context, val tempList: List<ForcastFragment.ForeCastTemperature>) :
- RecyclerView.Adapter<ForecastAdapter.ViewHolder>(){
+class ForecastAdapter(
+    val context: Context,
+    val tempList: List<ForcastFragment.ForeCastTemperature>
+) :
+    RecyclerView.Adapter<ForecastAdapter.ViewHolder>() {
 
-    class ViewHolder(view: View): RecyclerView.ViewHolder(view) {
+    class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val day = view.tv_day
         val temp = view.tv_day_temp
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ForecastAdapter.ViewHolder {
-       val view = LayoutInflater.from(parent.context).inflate(R.layout.layout_forecast_item,parent,false)
+        val view = LayoutInflater.from(parent.context)
+            .inflate(R.layout.layout_forecast_item, parent, false)
         return ViewHolder(view)
     }
 

@@ -40,6 +40,7 @@ class WeatherViewModel @Inject constructor(private val weatherRepo: WeatherRepos
 
     }
 
+    // get forecast
     fun getForecast() {
 
         viewModelScope.launch {

@@ -32,7 +32,7 @@ class WeatherModule {
 
     @Singleton
     @Provides
-    fun provideRetrofit(okHttpClient: OkHttpClient,baseurl: String): Retrofit =  Retrofit.Builder()
+    fun provideRetrofit(okHttpClient: OkHttpClient, baseurl: String): Retrofit = Retrofit.Builder()
         .addConverterFactory(GsonConverterFactory.create())
         .baseUrl(baseurl)
         .client(okHttpClient)
