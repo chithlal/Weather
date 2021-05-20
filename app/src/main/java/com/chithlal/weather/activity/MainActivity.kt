@@ -2,6 +2,7 @@ package com.chithlal.weather.activity
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.os.Handler
 import android.view.View
 import android.view.animation.AnimationUtils
 import androidx.activity.viewModels
@@ -15,6 +16,9 @@ import com.chithlal.weather.viewmodel.WeatherViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.layout_error_screen.*
+import java.util.*
+import java.util.concurrent.Executors
+import java.util.concurrent.TimeUnit
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
@@ -27,8 +31,11 @@ class MainActivity : AppCompatActivity() {
         setupForecastView()
 
         bt_retry.setOnClickListener{
-            weatherViewModel.getWeather()
-            weatherViewModel.getForecast()
+            showLoading(true)
+            Executors.newSingleThreadScheduledExecutor().schedule({
+                weatherViewModel.getWeather()
+                weatherViewModel.getForecast()
+            }, 2, TimeUnit.SECONDS)
         }
     }
 
@@ -37,8 +44,12 @@ class MainActivity : AppCompatActivity() {
     override fun onResume() {
         super.onResume()
         showLoading(true)
-        weatherViewModel.getWeather()
-        weatherViewModel.getForecast()
+        Executors.newSingleThreadScheduledExecutor().schedule({
+            weatherViewModel.getWeather()
+            weatherViewModel.getForecast()
+        }, 2, TimeUnit.SECONDS)
+
+
     }
 
     private fun setupTemperatureView() {
